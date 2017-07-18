@@ -1,6 +1,6 @@
 {
   "name": "cape-cinema",
-  "version": "0.1.0",
+  "version": "0.27.5",
   "private": true,
   "dependencies": {
     "lodash": "^4.17.4",
