@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import ResourceMoviesFilter from './components/ResourceMoviesFilter';
 import ResourceMoviesList from './components/ResourceMoviesList';
 import UserMoviesList from './components/UserMoviesList';
@@ -7,12 +8,15 @@ import ResourceMoviesPagination from './components/ResourceMoviesPagination';
 import './App.css';
 
 const baseUrl = 'https://api.themoviedb.org/3/';
-const apiKey = '429dc617412137ebfc29880cd90d1bc6';
+const apiKey = process.env.REACT_APP_MOVIES_API_KEY;
 const today = new Date();
 
 class App extends Component {
 
   constructor(props) {
+
+    console.log(process.env);
+
     super(props);
 
     this.state = {
