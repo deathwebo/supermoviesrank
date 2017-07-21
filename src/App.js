@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
+import cookie from 'react-cookies';
 
+// Our own custom components
 import ResourceMoviesFilter from './components/ResourceMoviesFilter';
 import ResourceMoviesList from './components/ResourceMoviesList';
 import UserMoviesList from './components/UserMoviesList';
 import ResourceMoviesPagination from './components/ResourceMoviesPagination';
+import UserWidget from './components/UserWidget';
 
 import './App.css';
 
 const baseUrl = 'https://api.themoviedb.org/3/';
 const apiKey = process.env.REACT_APP_MOVIES_API_KEY;
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const today = new Date();
 
 class App extends Component {
 
   constructor(props) {
-
-    console.log(process.env);
 
     super(props);
 
@@ -26,7 +28,9 @@ class App extends Component {
       currentPage: 1,
       imageBaseUrl: '',
       posterSize: '',
-      filter: ''
+      filter: '',
+      token: cookie.load('token'),
+      profile: cookie.load('profile')
     };
   }
 
@@ -154,9 +158,25 @@ class App extends Component {
     });
   }
 
+
+  onGoogleLoginSuccess(response) {
+    this.setState({
+      profile: response.profileObj,
+      token: response.tokenObj
+    });
+  }
+
   render() {
     return (
       <div className="App">
+
+        <UserWidget 
+          responseGoogle={response => this.onGoogleLoginSuccess(response)} 
+          token={this.state.token}
+          profile={this.state.profile}
+          clientId={clientId}
+        />
+
         <ResourceMoviesFilter filterMovies={query => this.filterMovies(query)} />
         <ResourceMoviesPagination
           pages={this.state.pages}
