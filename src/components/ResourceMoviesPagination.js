@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const ResourceMoviesPagination = ({pages, currentPage, changePage}) => {
 
@@ -28,5 +29,11 @@ const ResourceMoviesPagination = ({pages, currentPage, changePage}) => {
   </div>
   );
 }
+
+ResourceMoviesPagination.propTypes = {
+  pages: PropTypes.array.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  changePage: PropTypes.func.isRequired
+};
 
 export default ResourceMoviesPagination;

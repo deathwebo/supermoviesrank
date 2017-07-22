@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import debounce from 'lodash/debounce';
+import PropTypes from 'prop-types';
 
 class ResourceMoviesFilter extends Component {
 
@@ -39,5 +40,9 @@ class ResourceMoviesFilter extends Component {
     );
   }
 }
+
+ResourceMoviesFilter.propTypes = {
+  filterMovies: PropTypes.func.isRequired
+};
 
 export default ResourceMoviesFilter;

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import cookie from 'react-cookies';
 
 // Our own custom components
-import ResourceMoviesFilter from './components/ResourceMoviesFilter';
 import ResourceMoviesList from './components/ResourceMoviesList';
 import UserMoviesList from './components/UserMoviesList';
 import ResourceMoviesPagination from './components/ResourceMoviesPagination';
@@ -37,6 +36,8 @@ class App extends Component {
   componentDidMount() {
     this.fetchImagesConfiguration()
     .then(() => this.fetchMoviesFromResource());
+
+    this.getSavedUserMovies();
   }
 
   fetchImagesConfiguration() {
@@ -93,7 +94,7 @@ class App extends Component {
 
     this.setState({
       userMovies: userMovies
-    });
+    }, () => this.saveMovies());
   }
 
   addMovieToBottom(movie) {
@@ -107,7 +108,7 @@ class App extends Component {
 
     this.setState({
       userMovies: userMovies
-    });
+    }, () => this.saveMovies());
   }
 
   removeMovie(movie) {
@@ -118,7 +119,7 @@ class App extends Component {
 
     this.setState({
       userMovies: movies
-    });
+    }, () => this.saveMovies());
   }
 
   moveMovie(movie, direction) {
@@ -149,6 +150,28 @@ class App extends Component {
 
     this.setState({
       userMovies: movies
+    }, () => this.saveMovies());
+  }
+
+  saveMovies() {
+    let formData = new FormData();
+
+    formData.append('movies', JSON.stringify(this.state.userMovies));
+
+    fetch('http://localhost:8000/api/movies/'+this.state.profile.googleId, {
+      method: 'post',
+      body: formData,
+    });
+  }
+
+  getSavedUserMovies() {
+    fetch('http://localhost:8000/api/movies/'+this.state.profile.googleId)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      this.setState({
+        'userMovies': data
+      });
     });
   }
 
@@ -158,8 +181,10 @@ class App extends Component {
     });
   }
 
-
   onGoogleLoginSuccess(response) {
+    cookie.save('profile', response.profileObj);
+    cookie.save('token', response.tokenObj);
+    
     this.setState({
       profile: response.profileObj,
       token: response.tokenObj
@@ -177,7 +202,6 @@ class App extends Component {
           clientId={clientId}
         />
 
-        <ResourceMoviesFilter filterMovies={query => this.filterMovies(query)} />
         <ResourceMoviesPagination
           pages={this.state.pages}
           currentPage={this.state.currentPage}
@@ -191,7 +215,8 @@ class App extends Component {
               addToTop={movie => this.addMovieToTop(movie)}
               addToBottom={movie => this.addMovieToBottom(movie)}
               filter={this.state.filter}
-              movies={this.state.resourceMovies} />
+              movies={this.state.resourceMovies} 
+              userMovies={this.state.userMovies} />
           </div>
           <div className="userMovies">
             <UserMoviesList 
