@@ -2,25 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Movie from './Movie';
 
-const ResourceMoviesList = ({ movies, imageBaseUrl, posterSize, addToTop, 
-  addToBottom, filter = '', userMovies }) => (
+const ResourceMoviesList = (props) => {
+
+  let { addToTop, addToBottom, filter = '' } = props;
+  
+  return (
   <div className="ResourceMoviesList">
-    {movies
+    {props.movies
     .filter(movie => movie.title.toLowerCase().search(filter.toLowerCase()) !== -1)
     .map(movie => {
-      let isMovieAdded = (userMovies.indexOf(movie) !== -1);
+
+      let foundMovie = props.userMovies.filter(currentMovie => {
+        return currentMovie.id === movie.id;
+      });
+
+      let isMovieAdded = (foundMovie.length > 0);
 
       return <Movie
         movie={movie}
-        imageBaseUrl={imageBaseUrl}
-        posterSize={posterSize}
+        imageBaseUrl={props.imageBaseUrl}
+        posterSize={props.posterSize}
         addToTop={movie => addToTop(movie)}
         addToBottom={movie => addToBottom(movie)}
         isMovieAdded={isMovieAdded}
         key={movie.id} />
     })}
   </div>
-)
+  )
+}
 
 ResourceMoviesList.propTypes = {
   movies: PropTypes.array.isRequired,
@@ -28,7 +37,8 @@ ResourceMoviesList.propTypes = {
   posterSize: PropTypes.string.isRequired,
   addToTop: PropTypes.func.isRequired,
   addToBottom: PropTypes.func.isRequired,
-  filter: PropTypes.string
+  filter: PropTypes.string,
+  isLoadingList: PropTypes.bool.isRequired
 };
 
 export default ResourceMoviesList;

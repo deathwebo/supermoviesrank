@@ -1,38 +1,78 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import MovieFooterItem from './MovieFooterItem';
 
 const Movie = ({movie, imageBaseUrl, posterSize, 
   removeMovie, addToTop, addToBottom, moveMovie, isMovieAdded = false}) => (
 
-  <div className={'movie ' + (isMovieAdded ? 'added' : '')}>
+  <div className={'movie card ' + (isMovieAdded ? 'added' : '')}>
 
-    <span className="movie--title">{movie.title}</span>
+    <div className="card-content">
 
-    <div className="movie--data">
-
-      <div className="movie--poster">
-        <img 
-          src={imageBaseUrl+posterSize+movie.poster_path} 
-          alt={'poster for the movie '+movie.title} />
-      </div>
-
-      <div className="movie--overview">
-        {movie.overview}
-      </div>
-
-      {!isMovieAdded && (
-        <div className="movie--options">
-
-        {addToTop && <button onClick={() => addToTop(movie)}>TOP</button> }
-        {addToBottom && <button onClick={() => addToBottom(movie)}>BOTTOM</button> }
-        {removeMovie && <button onClick={() => removeMovie(movie)}>REMOVE</button> }
-        {moveMovie && <button onClick={() => moveMovie(movie, 'up')}>UP</button> }
-        {moveMovie && <button onClick={() => moveMovie(movie, 'down')}>DOWN</button> }
-
+      <div className="media">
+        <div className="media-left">
+          <img 
+            src={imageBaseUrl+posterSize+movie.poster_path} 
+            alt={'poster for the movie '+movie.title} />
         </div>
-      )}
+        
+        <div className="media-content">
+          <strong >{movie.title}</strong>
+          <p className="is-hidden-mobile">{movie.overview}</p>
+        </div>
+      </div>
 
     </div>
+
+    {!isMovieAdded && (
+      <footer className="card-footer">
+
+        <MovieFooterItem 
+          render={typeof addToTop === 'function'} 
+          action={() => addToTop(movie)}>
+          <span className="icon">
+            <i className="fa fa-plus"></i>
+          </span>
+          top
+        </MovieFooterItem>
+
+        <MovieFooterItem 
+          render={typeof addToBottom === 'function'}
+          action={() => addToBottom(movie)}>
+          <span className="icon">
+            <i className="fa fa-plus"></i>
+          </span>
+          bottom
+        </MovieFooterItem>
+
+        <MovieFooterItem 
+          render={typeof removeMovie === 'function'}
+          action={() => removeMovie(movie)}>
+          <span className="icon">
+            <i className="fa fa-trash-o"></i>
+          </span>
+        </MovieFooterItem>
+
+        <MovieFooterItem 
+          render={typeof moveMovie === 'function'}
+          action={() => moveMovie(movie, 'up')}>
+          move
+          <span className="icon">
+            <i className="fa fa-level-up"></i>
+          </span>
+        </MovieFooterItem>
+
+        <MovieFooterItem 
+          render={typeof moveMovie === 'function'}
+          action={() => moveMovie(movie, 'down')}>
+          move
+          <span className="icon">
+            <i className="fa fa-level-down"></i>
+          </span>
+        </MovieFooterItem>
+
+      </footer>
+    )}
 
   </div>
 )
@@ -41,10 +81,10 @@ Movie.propTypes = {
   movie: PropTypes.object.isRequired,
   imageBaseUrl: PropTypes.string.isRequired,
   posterSize: PropTypes.string.isRequired,
-  removeMovie: PropTypes.func.isRequired,
-  addToTop: PropTypes.func.isRequired,
-  addToBottom: PropTypes.func.isRequired,
-  moveMovie: PropTypes.func.isRequired,
+  removeMovie: PropTypes.func,
+  addToTop: PropTypes.func,
+  addToBottom: PropTypes.func,
+  moveMovie: PropTypes.func,
   isMovieAdded: PropTypes.bool
 };
 

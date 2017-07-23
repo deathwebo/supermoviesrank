@@ -12,14 +12,18 @@ const UserWidget = ({profile, responseGoogle, clientId}) => {
   return (
     <GoogleLogin
       clientId={clientId}
-      buttonText="Login"
       onSuccess={response => responseGoogle(response)}
-    />
+    >
+      Sign In
+      <span className="icon">
+        <i className="fa fa-google"></i>
+      </span>
+    </GoogleLogin>
   );
 }
 
 UserWidget.propTypes = {
-  profile: PropTypes.object.isRequired,
+  profile: PropTypes.object,
   responseGoogle: PropTypes.func.isRequired,
   clientId: PropTypes.string.isRequired
 };

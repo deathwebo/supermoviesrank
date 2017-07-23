@@ -2,16 +2,15 @@ import React, { Component } from 'react';
 import cookie from 'react-cookies';
 
 // Our own custom components
+import Header from './components/Header';
 import ResourceMoviesList from './components/ResourceMoviesList';
 import UserMoviesList from './components/UserMoviesList';
 import ResourceMoviesPagination from './components/ResourceMoviesPagination';
-import UserWidget from './components/UserWidget';
 
 import './App.css';
 
 const baseUrl = 'https://api.themoviedb.org/3/';
 const apiKey = process.env.REACT_APP_MOVIES_API_KEY;
-const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const today = new Date();
 
 class App extends Component {
@@ -29,7 +28,8 @@ class App extends Component {
       posterSize: '',
       filter: '',
       token: cookie.load('token'),
-      profile: cookie.load('profile')
+      profile: cookie.load('profile'),
+      isLoadingList: true
     };
   }
 
@@ -38,6 +38,7 @@ class App extends Component {
     .then(() => this.fetchMoviesFromResource());
 
     this.getSavedUserMovies();
+
   }
 
   fetchImagesConfiguration() {
@@ -54,6 +55,11 @@ class App extends Component {
   }
 
   fetchMoviesFromResource() {
+
+    this.setState({
+      isLoadingList: true
+    });
+
     let todayRawString = today.toISOString(),
         url = baseUrl + 'discover/movie'
      + '?api_key=' + apiKey
@@ -69,7 +75,8 @@ class App extends Component {
       this.setState({
         currentPage: data.page,
         pages: data.total_pages,
-        resourceMovies: data.results
+        resourceMovies: data.results,
+        isLoadingList: false
       });
     })
     .catch((ex) => {
@@ -154,6 +161,10 @@ class App extends Component {
   }
 
   saveMovies() {
+    if (!this.state.profile) {
+      return;
+    }
+
     let formData = new FormData();
 
     formData.append('movies', JSON.stringify(this.state.userMovies));
@@ -164,13 +175,26 @@ class App extends Component {
     });
   }
 
-  getSavedUserMovies() {
+  getSavedUserMovies(fromLogin = false) {
+    if (!this.state.profile) {
+      return;
+    }
+
     fetch('http://localhost:8000/api/movies/'+this.state.profile.googleId)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
+
+      if (data.result.length == 0) {
+
+        if (fromLogin && this.state.userMovies.length > 0) {
+          this.saveMovies();
+        }
+
+        return;
+      }
+
       this.setState({
-        'userMovies': data
+        'userMovies': data.result
       });
     });
   }
@@ -189,44 +213,57 @@ class App extends Component {
       profile: response.profileObj,
       token: response.tokenObj
     });
+
+    this.getSavedUserMovies();
   }
 
   render() {
     return (
       <div className="App">
 
-        <UserWidget 
-          responseGoogle={response => this.onGoogleLoginSuccess(response)} 
+        <Header 
+          onGoogleLoginSuccess={response => this.onGoogleLoginSuccess(response)} 
           token={this.state.token}
-          profile={this.state.profile}
-          clientId={clientId}
-        />
+          profile={this.state.profile} />
 
-        <ResourceMoviesPagination
-          pages={this.state.pages}
-          currentPage={this.state.currentPage}
-          changePage={page => this.changePage(page)}
-        />
-        <div className="moviesListings">
-          <div className="resourcesMovies">
-            <ResourceMoviesList 
-              imageBaseUrl={this.state.imageBaseUrl}
-              posterSize={this.state.posterSize}
-              addToTop={movie => this.addMovieToTop(movie)}
-              addToBottom={movie => this.addMovieToBottom(movie)}
-              filter={this.state.filter}
-              movies={this.state.resourceMovies} 
-              userMovies={this.state.userMovies} />
+        <section className="section">
+          <ResourceMoviesPagination
+            pages={this.state.pages}
+            currentPage={this.state.currentPage}
+            changePage={page => this.changePage(page)}
+          />
+
+          <div className="moviesListings columns is-mobile">
+
+            <div className="resourcesMovies column is-half">
+              <ResourceMoviesList 
+                imageBaseUrl={this.state.imageBaseUrl}
+                posterSize={this.state.posterSize}
+                addToTop={movie => this.addMovieToTop(movie)}
+                addToBottom={movie => this.addMovieToBottom(movie)}
+                filter={this.state.filter}
+                movies={this.state.resourceMovies} 
+                userMovies={this.state.userMovies} />
+            </div>
+
+            <div className="userMovies column is-half">
+              <UserMoviesList 
+                imageBaseUrl={this.state.imageBaseUrl}
+                posterSize={this.state.posterSize}
+                removeMovie={movie => this.removeMovie(movie)}
+                moveMovie={(movie, direction) => this.moveMovie(movie, direction)}
+                movies={this.state.userMovies} />
+            </div>
           </div>
-          <div className="userMovies">
-            <UserMoviesList 
-              imageBaseUrl={this.state.imageBaseUrl}
-              posterSize={this.state.posterSize}
-              removeMovie={movie => this.removeMovie(movie)}
-              moveMovie={(movie, direction) => this.moveMovie(movie, direction)}
-              movies={this.state.userMovies} />
-          </div>
-        </div>
+
+          <ResourceMoviesPagination
+            pages={this.state.pages}
+            currentPage={this.state.currentPage}
+            changePage={page => this.changePage(page)}
+          />
+
+        </section>
+
       </div>
     );
   }

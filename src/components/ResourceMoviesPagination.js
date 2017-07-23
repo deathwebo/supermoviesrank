@@ -10,28 +10,28 @@ const ResourceMoviesPagination = ({pages, currentPage, changePage}) => {
   };
 
   return (
-  <div className="ResourceMoviesPagination">
-    <ul className="pagination">
+  <nav className="ResourceMoviesPagination pagination">
+    <ul className="pagination-list">
     {Array.from(new Array(pages),(val,index) => {
-      let actualPage = index + 1;
+      let actualPage = index + 1,
+          isCurrent = (actualPage === currentPage);
+
       return (
         <li key={index}>
-          { actualPage === currentPage 
-            ? actualPage 
-            : <a href="#page" 
-              onClick={(event, page) => onClickHandler(event, actualPage)}
-              >{actualPage}</a>
-          }
+          <a href="#page" 
+            onClick={(event, page) => onClickHandler(event, actualPage)}
+            className={'pagination-link ' + (isCurrent ? 'is-current' : '') }
+          >{actualPage}</a>
         </li>
       );
     })}
     </ul>
-  </div>
+  </nav>
   );
 }
 
 ResourceMoviesPagination.propTypes = {
-  pages: PropTypes.array.isRequired,
+  pages: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
   changePage: PropTypes.func.isRequired
 };
