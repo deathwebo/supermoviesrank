@@ -36,9 +36,7 @@ ResourceMoviesList.propTypes = {
   imageBaseUrl: PropTypes.string.isRequired,
   posterSize: PropTypes.string.isRequired,
   addToTop: PropTypes.func.isRequired,
-  addToBottom: PropTypes.func.isRequired,
-  filter: PropTypes.string,
-  isLoadingList: PropTypes.bool.isRequired
+  addToBottom: PropTypes.func.isRequired
 };
 
 export default ResourceMoviesList;

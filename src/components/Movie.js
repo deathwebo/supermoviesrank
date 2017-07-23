@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MovieFooterItem from './MovieFooterItem';
 
-const Movie = ({movie, imageBaseUrl, posterSize, 
-  removeMovie, addToTop, addToBottom, moveMovie, isMovieAdded = false}) => (
+const Movie = ({movie, imageBaseUrl, posterSize, removeMovie, 
+  addToTop, addToBottom, moveMovie, isMovieAdded = false, showOptions = true}) => (
 
   <div className={'movie card ' + (isMovieAdded ? 'added' : '')}>
 
@@ -24,7 +24,7 @@ const Movie = ({movie, imageBaseUrl, posterSize,
 
     </div>
 
-    {!isMovieAdded && (
+    {!isMovieAdded && showOptions && (
       <footer className="card-footer">
 
         <MovieFooterItem 
@@ -85,7 +85,8 @@ Movie.propTypes = {
   addToTop: PropTypes.func,
   addToBottom: PropTypes.func,
   moveMovie: PropTypes.func,
-  isMovieAdded: PropTypes.bool
+  isMovieAdded: PropTypes.bool,
+  showOptions: PropTypes.bool
 };
 
 export default Movie;

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bulma": "^0.4.3",
+    "hoist-non-react-statics": "^2.2.0",
     "lodash": "^4.17.4",
     "node-sass-chokidar": "^0.0.3",
     "npm-run-all": "^4.0.2",
