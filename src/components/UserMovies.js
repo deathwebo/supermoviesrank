@@ -137,7 +137,7 @@ class UserMovies extends Component {
 
         <div className="moviesListings columns is-mobile">
 
-          <div className="userMovies column is-half">
+          <div className="userMovies column is-half is-offset-one-quarter">
 
             <UserMoviesList 
               imageBaseUrl={this.state.imageBaseUrl}
