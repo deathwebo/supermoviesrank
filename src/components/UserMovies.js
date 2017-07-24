@@ -3,7 +3,6 @@ import UserMoviesList from './UserMoviesList';
 
 const baseUrl = 'https://api.themoviedb.org/3/';
 const apiKey = process.env.REACT_APP_MOVIES_API_KEY;
-const today = new Date();
 
 class UserMovies extends Component {
 
@@ -15,80 +14,32 @@ class UserMovies extends Component {
       imageBaseUrl: '',
       posterSize: '',
       resourceMovies: [],
-      pages: 1,
-      currentPage: 1,
+      noDataFound: true
     };
   }
 
   componentDidMount() {
     this.fetchImagesConfiguration()
-    .then(() => this.fetchMoviesFromResource());
-
-    this.getSavedUserMovies();
+    .then(() => this.getSavedUserMovies());
   }
 
-  removeMovie(movie) {
-    let movies = this.state.userMovies,
-        index = movies.indexOf(movie);
-
-    movies.splice(index, 1);
-
-    this.setState({
-      userMovies: movies
-    }, () => this.saveMovies());
-  }
-
-  moveMovie(movie, direction) {
-    let movies = this.state.userMovies,
-        oldIndex = movies.indexOf(movie),
-        index = oldIndex;
-
-    switch(direction) {
-      case 'up':
-        if (index === 0) return;
-
-        index--;
-      break;
-
-      case 'down':
-        if (index === movies.length) return;
-
-        index++;
-      break;
-
-      default:
-      throw new Error("Invalid direction "+ direction);
-    }
-
-    movies.splice(oldIndex, 1);
-
-    movies.splice(index, 0, movie);
-
-    this.setState({
-      userMovies: movies
-    }, () => this.saveMovies());
-  }
-
-  getSavedUserMovies(fromLogin = false) {
-    if (!this.props.profile) {
+  getSavedUserMovies() {
+    if (!this.props.userId) {
       return;
     }
 
-    fetch('http://localhost:8000/api/movies/'+this.props.profile.googleId)
+    fetch('http://localhost:8000/api/movies/'+this.props.userId)
     .then(response => response.json())
     .then(data => {
 
       if (data.result.length === 0) {
 
-        if (fromLogin && this.state.userMovies.length > 0) {
-          this.saveMovies();
-        }
-
         return;
       }
 
       this.setState({
-        'userMovies': data.result
+        'userMovies': data.result,
+        'noDataFound': false
       });
     });
   }
@@ -106,32 +57,26 @@ class UserMovies extends Component {
     });
   }
 
-  fetchMoviesFromResource() {
-
-    let todayRawString = today.toISOString(),
-        url = baseUrl + 'discover/movie'
-    + '?api_key=' + apiKey
-    + '&with_keywords=9715,9717'
-    + '&without_genres=16'
-    + '&page='+this.state.currentPage
-    + '&release_date.lte='+todayRawString.split("T")[0]
-    + '&sort_by=original_title.asc';
-
-    fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      this.setState({
-        currentPage: data.page,
-        pages: data.total_pages,
-        resourceMovies: data.results
-      });
-    })
-    .catch((ex) => {
-      console.log('parsing failed', ex)
-    });
-  }
-
   render() {
+
+    if (this.state.noDataFound) {
+      return (
+        <section className="hero is-danger is-medium is-bold">
+          <div className="hero-body">
+            <div className="container">
+              <h1 className="title">
+                Oooops!
+              </h1>
+              <h2 className="subtitle">
+                No data found in here
+              </h2>
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+
     return (
       <section className="section">
 

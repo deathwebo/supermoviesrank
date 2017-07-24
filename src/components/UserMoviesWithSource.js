@@ -24,9 +24,10 @@ class UserMoviesWithSource extends Component {
 
   componentDidMount() {
     this.fetchImagesConfiguration()
-    .then(() => this.fetchMoviesFromResource());
-
-    this.getSavedUserMovies();
+    .then(() => {
+      this.fetchMoviesFromResource()
+      this.getSavedUserMovies();
+    });
   }
 
   removeMovie(movie) {
