@@ -33,7 +33,6 @@ class App extends Component {
       token: response.tokenObj
     });
 
-    this.getSavedUserMovies();
   }
 
   render() {

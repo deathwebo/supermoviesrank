@@ -87,7 +87,7 @@ class UserMoviesWithSource extends Component {
     });
   }
 
-  getSavedUserMovies(fromLogin = false) {
+  getSavedUserMovies() {
     if (!this.props.profile) {
       return;
     }
@@ -98,7 +98,7 @@ class UserMoviesWithSource extends Component {
 
       if (data.result.length === 0) {
 
-        if (fromLogin && this.state.userMovies.length > 0) {
+        if (this.state.userMovies.length > 0) {
           this.saveMovies();
         }
 

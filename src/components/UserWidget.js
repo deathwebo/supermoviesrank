@@ -14,7 +14,7 @@ const UserWidget = ({profile, responseGoogle, clientId}) => {
       clientId={clientId}
       onSuccess={response => responseGoogle(response)}
     >
-      Sign In
+      <span>Sign in with </span>
       <span className="icon">
         <i className="fa fa-google"></i>
       </span>
