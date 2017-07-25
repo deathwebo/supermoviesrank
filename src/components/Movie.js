@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import MovieFooterItem from './MovieFooterItem';
 
 const Movie = ({movie, imageBaseUrl, posterSize, removeMovie, 
-  addToTop, addToBottom, moveMovie, isMovieAdded = false, showOptions = true}) => (
+  addToTop, addToBottom, moveMovie, orderNumber = null,
+  isMovieAdded = false, showOptions = true}) => (
 
   <div className={'movie card ' + (isMovieAdded ? 'added' : '')}>
 
@@ -17,8 +18,22 @@ const Movie = ({movie, imageBaseUrl, posterSize, removeMovie,
         </div>
         
         <div className="media-content">
-          <strong >{movie.title}</strong>
-          <p className="is-hidden-mobile">{movie.overview}</p>
+          <div className="content">
+            <div className="content-header columns">
+
+              {orderNumber && (
+                <div className="column rank is-narrow">
+                  <button className="button is-static">{orderNumber}</button>
+                </div>
+              )}
+
+              <div className="content-header-title column is-narrow">
+                <h4 className="title is-4 is-marginless">{movie.title}</h4>
+              </div>
+
+            </div>
+            <p className="is-hidden-mobile">{movie.overview}</p>
+          </div>
         </div>
       </div>
 
@@ -86,7 +101,8 @@ Movie.propTypes = {
   addToBottom: PropTypes.func,
   moveMovie: PropTypes.func,
   isMovieAdded: PropTypes.bool,
-  showOptions: PropTypes.bool
+  showOptions: PropTypes.bool,
+  orderNumber: PropTypes.number
 };
 
 export default Movie;

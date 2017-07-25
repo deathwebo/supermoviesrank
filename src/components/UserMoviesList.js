@@ -6,7 +6,7 @@ const UserMoviesList = ({movies, imageBaseUrl, posterSize,
   removeMovie, moveMovie, showOptions = true}) => (
 
   <div className="UserMoviesList">
-    {movies.map((movie) => {
+    {movies.map((movie, idx) => {
       return <Movie 
         movie={movie} 
         imageBaseUrl={imageBaseUrl}
@@ -14,6 +14,7 @@ const UserMoviesList = ({movies, imageBaseUrl, posterSize,
         removeMovie={movie => removeMovie(movie)}
         moveMovie={(movie, direction) => moveMovie(movie, direction)}
         showOptions={showOptions}
+        orderNumber={idx + 1}
         key={movie.id} />
     })}
   </div>
