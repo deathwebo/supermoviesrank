@@ -47,12 +47,12 @@ class App extends Component {
           profile={this.state.profile} />
 
         <Route exact path="/" 
-          component={() => (
+          render={() => (
             <UserMoviesWithSource profile={this.state.profile} />
         )} />
 
         <Route path="/:id" 
-          component={({ match }) => (
+          render={({ match }) => (
             <UserMovies profile={this.state.profile} userId={match.params.id}  />
           )} />
 

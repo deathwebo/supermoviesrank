@@ -30,6 +30,21 @@ class UserMoviesWithSource extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+
+    if ( (typeof this.props.profile === "undefined" && nextProps.profile)
+      && (this.state.userMovies.length > 0) ) {
+
+      this.getSavedUserMovies()
+      .then(savedMovies => {
+        console.log('got saved movies', savedMovies);
+      });
+      // this.saveMovies(nextProps.profile);
+
+    }
+
+  }
+
   removeMovie(movie) {
     let movies = this.state.userMovies,
         index = movies.indexOf(movie);
@@ -38,7 +53,7 @@ class UserMoviesWithSource extends Component {
 
     this.setState({
       userMovies: movies
-    }, () => this.saveMovies());
+    }, () => this.saveMovies(this.props.profile));
   }
 
   moveMovie(movie, direction) {
@@ -69,11 +84,11 @@ class UserMoviesWithSource extends Component {
 
     this.setState({
       userMovies: movies
-    }, () => this.saveMovies());
+    }, () => this.saveMovies(this.props.profile));
   }
 
-  saveMovies() {
-    if (!this.props.profile) {
+  saveMovies(profile) {
+    if (!profile) {
       return;
     }
 
@@ -81,26 +96,25 @@ class UserMoviesWithSource extends Component {
 
     formData.append('movies', JSON.stringify(this.state.userMovies));
 
-    fetch('http://localhost:8000/api/movies/'+this.props.profile.googleId, {
+    return fetch('http://localhost:8000/api/movies/'+profile.googleId, {
       method: 'post',
       body: formData,
     });
   }
 
   getSavedUserMovies() {
+
     if (!this.props.profile) {
       return;
     }
 
-    fetch('http://localhost:8000/api/movies/'+this.props.profile.googleId)
-    .then(response => response.json())
+    let promise = fetch('http://localhost:8000/api/movies/'+this.props.profile.googleId);
+
+    promise.then(response => response.json())
     .then(data => {
 
       if (data.result.length === 0) {
-
-        if (this.state.userMovies.length > 0) {
-          this.saveMovies();
-        }
+        console.log('about to reject');
 
         return;
       }
@@ -108,7 +122,11 @@ class UserMoviesWithSource extends Component {
       this.setState({
         'userMovies': data.result
       });
+
+      return data.result;
     });
+
+    return promise;
   }
 
   fetchImagesConfiguration() {
@@ -166,7 +184,7 @@ class UserMoviesWithSource extends Component {
 
     this.setState({
       userMovies: userMovies
-    }, () => this.saveMovies());
+    }, () => this.saveMovies(this.props.profile));
   }
 
   addMovieToBottom(movie) {
@@ -180,7 +198,7 @@ class UserMoviesWithSource extends Component {
 
     this.setState({
       userMovies: userMovies
-    }, () => this.saveMovies());
+    }, () => this.saveMovies(this.props.profile));
   }
 
   render() {
