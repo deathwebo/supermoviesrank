@@ -26,7 +26,7 @@ class UserMoviesWithSource extends Component {
     this.fetchImagesConfiguration()
     .then(() => {
       this.fetchMoviesFromResource()
-      this.getSavedUserMovies();
+      this.getSavedUserMovies(this.props.profile);
     });
   }
 
@@ -35,9 +35,11 @@ class UserMoviesWithSource extends Component {
     if ( (typeof this.props.profile === "undefined" && nextProps.profile)
       && (this.state.userMovies.length > 0) ) {
 
-      this.getSavedUserMovies()
-      .then(savedMovies => {
-        console.log('got saved movies', savedMovies);
+      let promise = this.getSavedUserMovies(nextProps.profile);
+
+      promise.then(savedMovies => {
+        console.log(savedMovies);
+        // console.log('got saved movies', savedMovies);
       });
       // this.saveMovies(nextProps.profile);
 
@@ -102,21 +104,19 @@ class UserMoviesWithSource extends Component {
     });
   }
 
-  getSavedUserMovies() {
+  getSavedUserMovies(profile) {
 
-    if (!this.props.profile) {
+    if (!profile) {
       return;
     }
 
-    let promise = fetch('http://localhost:8000/api/movies/'+this.props.profile.googleId);
+    let promise = fetch('http://localhost:8000/api/movies/'+profile.googleId);
 
     promise.then(response => response.json())
     .then(data => {
 
       if (data.result.length === 0) {
-        console.log('about to reject');
-
-        return;
+        return [];
       }
 
       this.setState({
