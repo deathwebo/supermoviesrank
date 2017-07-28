@@ -37,12 +37,11 @@ class UserMoviesWithSource extends Component {
 
       let promise = this.getSavedUserMovies(nextProps.profile);
 
-      promise.then(savedMovies => {
-        console.log(savedMovies);
-        // console.log('got saved movies', savedMovies);
+      promise.then(movies => {
+        if (movies.length === 0) {
+          this.saveMovies(nextProps.profile);
+        }
       });
-      // this.saveMovies(nextProps.profile);
-
     }
 
   }
@@ -110,9 +109,8 @@ class UserMoviesWithSource extends Component {
       return;
     }
 
-    let promise = fetch('http://localhost:8000/api/movies/'+profile.googleId);
-
-    promise.then(response => response.json())
+    return fetch('http://localhost:8000/api/movies/'+profile.googleId)
+    .then(response => response.json())
     .then(data => {
 
       if (data.result.length === 0) {
@@ -125,8 +123,6 @@ class UserMoviesWithSource extends Component {
 
       return data.result;
     });
-
-    return promise;
   }
 
   fetchImagesConfiguration() {
