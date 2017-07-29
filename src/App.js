@@ -46,6 +46,13 @@ class App extends Component {
           token={this.state.token}
           profile={this.state.profile} />
 
+        {(!this.state.profile && !this.state.token) && (
+          <div className="notification is-warning">
+            <strong>Warning!</strong> You need to sign in, using your google credentials, to be able to 
+            save your awesome movies list and and share it
+          </div>
+        )}
+
         <Route exact path="/" 
           render={() => (
             <UserMoviesWithSource profile={this.state.profile} />

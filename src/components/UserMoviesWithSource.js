@@ -201,15 +201,20 @@ class UserMoviesWithSource extends Component {
 
     return (
     <section className="section">
-      <ResourceMoviesPagination
-        pages={this.state.pages}
-        currentPage={this.state.currentPage}
-        changePage={page => this.changePage(page)}
-      />
 
       <div className="moviesListings columns is-mobile">
 
         <div className="resourcesMovies column is-half">
+
+          <h1 className="title">Available superhero movies</h1>
+          <h2 className="subtitle">Search all the released superhero movies to date, and add them to your list!</h2>
+
+          <ResourceMoviesPagination
+            pages={this.state.pages}
+            currentPage={this.state.currentPage}
+            changePage={page => this.changePage(page)}
+          />
+
           <ResourceMoviesList 
             imageBaseUrl={this.state.imageBaseUrl}
             posterSize={this.state.posterSize}
@@ -217,9 +222,19 @@ class UserMoviesWithSource extends Component {
             addToBottom={movie => this.addMovieToBottom(movie)}
             movies={this.state.resourceMovies} 
             userMovies={this.state.userMovies} />
+
+          <ResourceMoviesPagination
+            pages={this.state.pages}
+            currentPage={this.state.currentPage}
+            changePage={page => this.changePage(page)}
+          />
         </div>
 
         <div className="userMovies column is-half">
+          <h1 className="title">Your superhero movies list</h1>
+          <h2 className="subtitle">Use the list of available movies to start building your list, 
+            you can move them up and down your list to build the perfect <strong>superhero movie tier list</strong></h2>
+
           <UserMoviesList 
             imageBaseUrl={this.state.imageBaseUrl}
             posterSize={this.state.posterSize}
@@ -229,11 +244,6 @@ class UserMoviesWithSource extends Component {
         </div>
       </div>
 
-      <ResourceMoviesPagination
-        pages={this.state.pages}
-        currentPage={this.state.currentPage}
-        changePage={page => this.changePage(page)}
-      />
     </section>
     )
   }
