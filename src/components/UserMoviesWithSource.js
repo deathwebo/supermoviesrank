@@ -202,12 +202,12 @@ class UserMoviesWithSource extends Component {
     return (
     <section className="section">
 
-      <div className="moviesListings columns is-mobile">
+      <div className="moviesListings columns">
 
-        <div className="resourcesMovies column is-half">
+        <div className="resourcesMovies column">
 
           <h1 className="title">Available superhero movies</h1>
-          <h2 className="subtitle">Search all the released superhero movies to date, and add them to your list!</h2>
+          <h2 className="subtitle">Browse all the released superhero movies to date, and add them to your list!</h2>
 
           <ResourceMoviesPagination
             pages={this.state.pages}
@@ -230,10 +230,12 @@ class UserMoviesWithSource extends Component {
           />
         </div>
 
-        <div className="userMovies column is-half">
+        <div className="userMovies column">
           <h1 className="title">Your superhero movies list</h1>
-          <h2 className="subtitle">Use the list of available movies to start building your list, 
-            you can move them up and down your list to build the perfect <strong>superhero movie tier list</strong></h2>
+          <h2 className="subtitle">
+            Build your own list, 
+            you can move them up and down your list to build the perfect <strong>superhero movie tier list</strong>
+          </h2>
 
           <UserMoviesList 
             imageBaseUrl={this.state.imageBaseUrl}

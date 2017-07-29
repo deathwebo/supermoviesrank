@@ -9,8 +9,12 @@ const ResourceMoviesPagination = ({pages, currentPage, changePage}) => {
     e.preventDefault();
   };
 
+  let style = {
+    marginBottom: '1rem'
+  };
+
   return (
-  <nav className="ResourceMoviesPagination pagination">
+  <nav className="ResourceMoviesPagination pagination" style={style}>
     <ul className="pagination-list">
     {Array.from(new Array(pages),(val,index) => {
       let actualPage = index + 1,

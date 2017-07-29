@@ -19,20 +19,20 @@ const Movie = ({movie, imageBaseUrl, posterSize, removeMovie,
         
         <div className="media-content">
           <div className="content">
-            <div className="content-header columns">
+            <div className="content-header is-clearfix">
 
               {orderNumber && (
-                <div className="column rank is-narrow">
-                  <button className="button is-static">{orderNumber}</button>
-                </div>
+                <button className="button is-static is-pulled-left"
+                style={{
+                  marginRight: '0.5rem'
+                }}
+                >{orderNumber}</button>
               )}
 
-              <div className="content-header-title column is-narrow">
-                <h4 className="title is-4 is-marginless">{movie.title}</h4>
-              </div>
+              <h4 className="title is-4 is-marginless">{movie.title}</h4>
 
             </div>
-            <p className="is-hidden-mobile">{movie.overview}</p>
+            <p>{movie.overview}</p>
           </div>
         </div>
       </div>
