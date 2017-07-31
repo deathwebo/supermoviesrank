@@ -3,6 +3,7 @@ import ResourceMoviesList from './ResourceMoviesList';
 import UserMoviesList from './UserMoviesList';
 import ResourceMoviesPagination from './ResourceMoviesPagination';
 
+const apiUrl = process.env.REACT_APP_BACKEND_API_URL;
 const baseUrl = 'https://api.themoviedb.org/3/';
 const apiKey = process.env.REACT_APP_MOVIES_API_KEY;
 const today = new Date();
@@ -97,7 +98,7 @@ class UserMoviesWithSource extends Component {
 
     formData.append('movies', JSON.stringify(this.state.userMovies));
 
-    return fetch('http://localhost:8000/api/movies/'+profile.googleId, {
+    return fetch(apiUrl+'/api/movies/'+profile.googleId, {
       method: 'post',
       body: formData,
     });
@@ -109,7 +110,7 @@ class UserMoviesWithSource extends Component {
       return;
     }
 
-    return fetch('http://localhost:8000/api/movies/'+profile.googleId)
+    return fetch(apiUrl+'/api/movies/'+profile.googleId)
     .then(response => response.json())
     .then(data => {
 

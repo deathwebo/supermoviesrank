@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import UserMoviesList from './UserMoviesList';
 
+const apiUrl = process.env.REACT_APP_BACKEND_API_URL;
 const baseUrl = 'https://api.themoviedb.org/3/';
 const apiKey = process.env.REACT_APP_MOVIES_API_KEY;
 
@@ -28,7 +29,7 @@ class UserMovies extends Component {
       return;
     }
 
-    fetch('http://localhost:8000/api/movies/'+this.props.userId)
+    fetch(apiUrl+'/api/movies/'+this.props.userId)
     .then(response => response.json())
     .then(data => {
 
