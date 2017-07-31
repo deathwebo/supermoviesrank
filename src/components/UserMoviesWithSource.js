@@ -133,7 +133,7 @@ class UserMoviesWithSource extends Component {
     .then(response => response.json())
     .then(data => {
       this.setState({
-        imageBaseUrl: data.images.base_url,
+        imageBaseUrl: data.images.secure_base_url,
         posterSize: data.images.poster_sizes[0]
       });
     });
