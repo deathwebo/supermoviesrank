@@ -81,9 +81,9 @@ class UserMovies extends Component {
     return (
       <section className="section">
 
-        <div className="moviesListings columns is-mobile">
+        <div className="moviesListings columns">
 
-          <div className="userMovies column is-half is-offset-one-quarter">
+          <div className="userMovies column">
 
             <UserMoviesList 
               imageBaseUrl={this.state.imageBaseUrl}
