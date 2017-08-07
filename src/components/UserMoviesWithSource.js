@@ -144,8 +144,8 @@ class UserMoviesWithSource extends Component {
     let todayRawString = today.toISOString(),
         url = baseUrl + 'discover/movie'
     + '?api_key=' + apiKey
-    + '&with_keywords=9715,9717'
-    + '&without_genres=16'
+    + '&with_keywords=9715|8828|849'
+    + '&without_genres=16|10770|99'
     + '&page='+this.state.currentPage
     + '&release_date.lte='+todayRawString.split("T")[0]
     + '&sort_by=original_title.asc';
